@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
@@ -39,7 +38,7 @@ function App() {
     var searchParameters = {
       method: 'GET',
       headers: {
-        'Content-Type': 'applications/json',
+        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + accessToken
       }
     }
@@ -50,7 +49,8 @@ function App() {
     console.log("artist id is: " + artistID);
 
     //Get request with artist id grab all the albums from that artist
-    var returnedAlbums = fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50', searchParameters)
+    // var returnedAlbums = 
+    fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50', searchParameters)
       .then(response => response.json())
       .then(data => {
         console.log(data);
