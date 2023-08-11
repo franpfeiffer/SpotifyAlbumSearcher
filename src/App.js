@@ -42,9 +42,10 @@ function App() {
         'Authorization': 'Bearer ' + accessToken
       }
     }
-    var artistIDResponse = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters);
-    var artistIDData = await artistIDResponse.json();
-    var artistID = artistIDData.artists.items[0].id;
+    var artistID = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters)
+      .then(response => response.json())
+      .then(data => { return data.artists.items[0].id});
+
 
     console.log("artist id is: " + artistID);
 
