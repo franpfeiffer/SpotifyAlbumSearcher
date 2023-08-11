@@ -1,71 +1,63 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, InputGroup, FormControl, Button, Row, Card, Col} from 'react-bootstrap';
-import { useState, useEffect} from 'react';
-
+import { Container, InputGroup, FormControl, Button, Row, Card, Col } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
 
 const CLIENT_ID = "b775496c44944543921f202d47afc481";
 const CLIENT_SECRET = "0d1288fa707d46589b0c0758705dd404";
 
-
-
 function App() {
-  //API Access Tokem
-  const [ searchInput, setSearchInput] = useState("");
-  const [ accessToken, setAccessToken] = useState("");
-  const [ albums, setAlbums] = useState([]);
-
+  // API Access Token
+  const [searchInput, setSearchInput] = useState("");
+  const [accessToken, setAccessToken] = useState("");
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    var authParameters = {
+    const authParameters = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: 'grant_type=client_credentials&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET
-    }
+    };
 
     fetch('https://accounts.spotify.com/api/token', authParameters)
       .then(result => result.json())
       .then(data => setAccessToken(data.access_token))
-  }, []) 
+      .catch(error => {
+        console.error("Error fetching access token:", error);
+      });
+  }, []);
 
-  //Search
-  async function search(){
-  console.log("Searching For " + searchInput);
+  async function search() {
+    console.log("Searching For " + searchInput);
 
-  //Get request using  search to get the artist id
-  var searchParameters = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + accessToken
-    }
-  }
+    const searchParameters = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
+    };
 
-  fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters)
-    .then(response => response.json())
-    .then(data => {
-      console.log("Data from Spotify API:", data); // Imprimir los datos devueltos por la API
-      // A partir de aquí, revisa la estructura de "data" en la consola del navegador
-      // para encontrar la ubicación correcta de la propiedad "items" en la estructura de datos.
-    })
-    .catch(error => {
-      console.error("Error fetching data from Spotify API:", error);
-    });
-}
-
-    //Get request with artist id grab all the albums from that artist
-    fetch(`https://api.spotify.com/v1/artists/${artistID}/albums?include_groups=album&market=US&limit=50`, searchParameters)
+    fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters)
       .then(response => response.json())
       .then(data => {
-        console.log(data);
-        setAlbums(data.items);
-      }); 
+        const artistID = data.artists.items[0].id;
+        console.log("Artist ID:", artistID);
+        fetchAlbums(artistID, searchParameters);
+      })
+      .catch(error => {
+        console.error("Error fetching data from Spotify API:", error);
+      });
+  }
 
-    //Display those albums to the user
-  console.log(albums);
-  
+  async function fetchAlbums(artistID, searchParameters) {
+    const albumsResponse = await fetch(`https://api.spotify.com/v1/artists/${artistID}/albums?include_groups=album&market=US&limit=50`, searchParameters);
+    const albumsData = await albumsResponse.json();
+    setAlbums(albumsData.items);
+  }
+
   return (
     <div className="App">
       <Container>
@@ -99,8 +91,8 @@ function App() {
           ))}
         </Row>
       </Container>
-      </div>
-  );}
-
+    </div>
+  );
+}
 
 export default App;
