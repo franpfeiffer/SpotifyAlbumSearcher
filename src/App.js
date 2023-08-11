@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, InputGroup, FormControl, Button, Row, Card} from 'react-bootstrap';
+import { Container, InputGroup, FormControl, Button, Row, Card, Col} from 'react-bootstrap';
 import { useState, useEffect} from 'react';
 
 
@@ -81,19 +81,19 @@ function App() {
         </InputGroup>
       </Container>
       <Container>
-        <Row className='mx-2 row row-cols-4'>
-          {albums.map( (album, i) => {
-            console.log(album);
-            return(
+        <Row className='mx-2 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4'>
+          {albums.map((album, i) => (
+            <Col key={i} className='mb-4'>
               <Card>
                 <Card.Img src={album.images[0].url} />
                 <Card.Body>
                   <Card.Title>{album.name}</Card.Title>
                 </Card.Body>
               </Card>
-            )
-          })}
+            </Col>
+          ))}
         </Row>
+
       </Container>
     </div>
   );
