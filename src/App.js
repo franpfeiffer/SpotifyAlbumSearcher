@@ -65,7 +65,6 @@ function App() {
       }); 
 
     //Display those albums to the user
-  }
   console.log(albums);
   
   return (
@@ -100,10 +99,9 @@ function App() {
             </Col>
           ))}
         </Row>
-
       </Container>
-    </div>
-  );
+      </div>
+  );}
 
 
 export default App;
