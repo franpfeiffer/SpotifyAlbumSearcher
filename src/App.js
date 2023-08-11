@@ -32,22 +32,28 @@ function App() {
 
   //Search
   async function search(){
-    console.log("Searching For " + searchInput);
-    
-    //Get request using  search to get the artist id
-    var searchParameters = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + accessToken
-      }
+  console.log("Searching For " + searchInput);
+
+  //Get request using  search to get the artist id
+  var searchParameters = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + accessToken
     }
-    var artistID = await fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters)
-      .then(response => response.json())
-      .then(data => { return data.artists.items[0].id});
+  }
 
-
-    console.log("artist id is: " + artistID);
+  fetch(`https://api.spotify.com/v1/search?q=${searchInput}&type=artist`, searchParameters)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Data from Spotify API:", data); // Imprimir los datos devueltos por la API
+      // A partir de aquí, revisa la estructura de "data" en la consola del navegador
+      // para encontrar la ubicación correcta de la propiedad "items" en la estructura de datos.
+    })
+    .catch(error => {
+      console.error("Error fetching data from Spotify API:", error);
+    });
+}
 
     //Get request with artist id grab all the albums from that artist
     // var returnedAlbums = 
@@ -98,6 +104,6 @@ function App() {
       </Container>
     </div>
   );
-}
+
 
 export default App;
