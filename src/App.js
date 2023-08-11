@@ -50,7 +50,7 @@ function App() {
 
     //Get request with artist id grab all the albums from that artist
     // var returnedAlbums = 
-    fetch('https://api.spotify.com/v1/artists/' + artistID + '/albums' + '?include_groups=album&market=US&limit=50', searchParameters)
+    fetch(`https://api.spotify.com/v1/artists/${artistID}/albums?include_groups=album&market=US&limit=50`, searchParameters)
       .then(response => response.json())
       .then(data => {
         console.log(data);
